@@ -6,186 +6,204 @@
   <title>World of Dinosaurs</title>
   <meta name="description" content="An interactive dinosaur encyclopedia for Android with 230+ species, 3D models, AR, AI chat, quizzes, and more.">
   <style>
+    /* ── Color tokens ── */
     :root {
       --bg: #0f1117;
+      --bg2: #1a2332;
       --card: #1a1d27;
       --accent: #4ade80;
       --accent2: #22d3ee;
       --text: #e2e8f0;
       --text-dim: #94a3b8;
       --border: #2d3348;
+      --hero-grad: linear-gradient(180deg, #1a2332 0%, #0f1117 100%);
     }
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg2: #e8f0fe;
+      --card: #ffffff;
+      --accent: #16a34a;
+      --accent2: #0891b2;
+      --text: #0f172a;
+      --text-dim: #475569;
+      --border: #cbd5e1;
+      --hero-grad: linear-gradient(180deg, #e8f0fe 0%, #f8fafc 100%);
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      transition: background 0.2s, color 0.2s;
     }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* Hero */
+    /* ── Top bar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-brand {
+      font-size: 0.95rem; font-weight: 600; color: var(--text);
+    }
+    .topbar-brand span { color: var(--accent); }
+    .topbar-controls { display: flex; gap: 8px; }
+    .toggle-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 999px;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none;
+      background: var(--card); color: var(--text); border: 1px solid var(--border);
+      transition: background 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+    .toggle-btn:hover { border-color: var(--accent); }
+
+    /* ── Hero ── */
     .hero {
       text-align: center;
       padding: 80px 20px 60px;
-      background: linear-gradient(180deg, #1a2332 0%, var(--bg) 100%);
+      background: var(--hero-grad);
     }
     .hero-icon {
-      width: 108px; height: 108px;
-      border-radius: 24px;
+      width: 108px; height: 108px; border-radius: 24px;
       margin-bottom: 24px;
       box-shadow: 0 8px 32px rgba(74, 222, 128, 0.15);
     }
-    .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
+    .hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 8px; }
     .hero h1 span { color: var(--accent); }
     .hero .tagline {
-      font-size: 1.15rem;
-      color: var(--text-dim);
-      max-width: 560px;
-      margin: 0 auto 32px;
+      font-size: 1.1rem; color: var(--text-dim);
+      max-width: 560px; margin: 0 auto 32px;
     }
-    .badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
     .badge {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 5px;
       background: var(--card); border: 1px solid var(--border);
-      padding: 8px 16px; border-radius: 999px;
-      font-size: 0.85rem; color: var(--text-dim);
+      padding: 7px 14px; border-radius: 999px;
+      font-size: 0.83rem; color: var(--text-dim);
     }
     .badge strong { color: var(--text); }
 
-    /* Screenshots */
+    /* ── Screenshots ── */
     .screenshots {
-      padding: 40px 20px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      padding: 40px 0;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
     }
     .screenshots-inner {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      min-width: min-content;
-      padding: 0 20px;
+      display: flex; gap: 14px;
+      justify-content: center; min-width: min-content;
+      padding: 0 24px;
     }
     .screenshots img {
-      height: 420px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      flex-shrink: 0;
+      height: 420px; border-radius: 16px;
+      border: 1px solid var(--border); flex-shrink: 0;
       transition: transform 0.2s;
     }
     .screenshots img:hover { transform: scale(1.03); }
 
-    /* Section */
-    .section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 60px 24px;
-    }
+    /* ── Section ── */
+    .section { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
     .section h2 {
-      font-size: 1.6rem;
-      margin-bottom: 32px;
-      text-align: center;
+      font-size: 1.5rem; margin-bottom: 28px; text-align: center;
     }
     .section h2 span { color: var(--accent); }
 
-    /* Features grid */
+    /* ── Features ── */
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
+      gap: 14px;
     }
     .feature {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 18px;
     }
-    .feature .icon { font-size: 1.5rem; margin-bottom: 8px; }
-    .feature h3 { font-size: 1rem; margin-bottom: 4px; }
-    .feature p { font-size: 0.88rem; color: var(--text-dim); }
+    .feature .icon { font-size: 1.4rem; margin-bottom: 6px; }
+    .feature h3 { font-size: 0.97rem; margin-bottom: 4px; }
+    .feature p { font-size: 0.86rem; color: var(--text-dim); }
 
-    /* Tech stack */
+    /* ── Tech stack ── */
     .tech-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 10px;
     }
     .tech-item {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 0.88rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 11px 14px; font-size: 0.86rem;
     }
-    .tech-item .label { color: var(--text-dim); font-size: 0.78rem; }
+    .tech-item .label { color: var(--text-dim); font-size: 0.76rem; }
     .tech-item .value { color: var(--text); font-weight: 500; }
 
-    /* Links */
+    /* ── Links ── */
     .links {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      padding: 40px 20px 80px;
+      display: flex; gap: 14px; justify-content: center;
+      flex-wrap: wrap; padding: 40px 20px 80px;
     }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
+      padding: 13px 26px; border-radius: 12px;
+      font-size: 0.95rem; font-weight: 600;
       transition: transform 0.15s, box-shadow 0.15s;
     }
     .btn:hover { transform: translateY(-2px); text-decoration: none; }
     .btn-primary {
-      background: var(--accent);
-      color: #0f1117;
-      box-shadow: 0 4px 16px rgba(74, 222, 128, 0.25);
+      background: var(--accent); color: #0f1117;
+      box-shadow: 0 4px 16px rgba(74, 222, 128, 0.2);
     }
     .btn-secondary {
-      background: var(--card);
-      color: var(--text);
+      background: var(--card); color: var(--text);
       border: 1px solid var(--border);
     }
 
-    /* Footer */
+    /* ── Footer ── */
     footer {
-      text-align: center;
-      padding: 32px 20px;
+      text-align: center; padding: 28px 20px;
       border-top: 1px solid var(--border);
-      font-size: 0.82rem;
-      color: var(--text-dim);
+      font-size: 0.8rem; color: var(--text-dim);
     }
     footer a { color: var(--accent2); }
 
-    /* Responsive */
+    /* ── Responsive ── */
     @media (max-width: 640px) {
       .hero h1 { font-size: 1.8rem; }
-      .hero .tagline { font-size: 1rem; }
+      .hero .tagline { font-size: 0.95rem; }
       .screenshots img { height: 320px; }
       .features { grid-template-columns: 1fr; }
+      .topbar { padding: 10px 16px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Top bar -->
+  <header class="topbar">
+    <span class="topbar-brand">World of <span>Dinosaurs</span></span>
+    <div class="topbar-controls">
+      <button class="toggle-btn" id="langBtn" onclick="toggleLang()">中文</button>
+      <button class="toggle-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
+    </div>
+  </header>
+
   <!-- Hero -->
   <section class="hero">
     <img src="images/app_icon.png" alt="World of Dinosaurs" class="hero-icon">
     <h1>World of <span>Dinosaurs</span></h1>
-    <p class="tagline">
-      An interactive dinosaur encyclopedia for Android &mdash; explore 230+ species
-      with 3D models, AR, AI chat, quizzes, and more.
+    <p class="tagline" data-en="An interactive dinosaur encyclopedia for Android — explore 230+ species with 3D models, AR, AI chat, quizzes, and more."
+                       data-zh="一款 Android 互动恐龙百科全书 — 探索 230+ 种恐龙，支持 3D 模型、AR、AI 问答、测验等功能。">
+      An interactive dinosaur encyclopedia for Android — explore 230+ species with 3D models, AR, AI chat, quizzes, and more.
     </p>
     <div class="badges">
-      <span class="badge"><strong>230+</strong> Species</span>
+      <span class="badge"><strong>230+</strong> <span data-en="Species" data-zh="种恐龙">Species</span></span>
       <span class="badge"><strong>3D</strong> &amp; AR</span>
-      <span class="badge"><strong>AI</strong> Chat</span>
+      <span class="badge"><strong>AI</strong> <span data-en="Chat" data-zh="问答">Chat</span></span>
       <span class="badge">EN / CN</span>
     </div>
   </section>
@@ -193,94 +211,107 @@
   <!-- Screenshots -->
   <section class="screenshots">
     <div class="screenshots-inner">
-      <img src="images/02_home.png" alt="Home Screen" loading="lazy">
-      <img src="images/03_detail.png" alt="Dinosaur Detail" loading="lazy">
-      <img src="images/04_timeline.png" alt="Timeline" loading="lazy">
-      <img src="images/05_quiz.png" alt="Quiz" loading="lazy">
-      <img src="images/06_chat.png" alt="AI Chat" loading="lazy">
-      <img src="images/07_settings.png" alt="Settings" loading="lazy">
+      <img src="images/02_home.png" data-en-alt="Home Screen"    data-zh-alt="主页"        alt="Home Screen" loading="lazy">
+      <img src="images/03_detail.png" data-en-alt="Dinosaur Detail" data-zh-alt="恐龙详情"  alt="Dinosaur Detail" loading="lazy">
+      <img src="images/04_timeline.png" data-en-alt="Timeline"    data-zh-alt="时间线"     alt="Timeline" loading="lazy">
+      <img src="images/05_quiz.png" data-en-alt="Quiz"            data-zh-alt="测验"        alt="Quiz" loading="lazy">
+      <img src="images/06_chat.png" data-en-alt="AI Chat"         data-zh-alt="AI 聊天"    alt="AI Chat" loading="lazy">
+      <img src="images/07_settings.png" data-en-alt="Settings"    data-zh-alt="设置"        alt="Settings" loading="lazy">
     </div>
   </section>
 
   <!-- Features -->
   <section class="section">
-    <h2>What's <span>Inside</span></h2>
+    <h2><span data-en="What's Inside" data-zh="功能特色">What's Inside</span></h2>
     <div class="features">
       <div class="feature">
         <div class="icon">&#x1F995;</div>
-        <h3>Dinosaur Encyclopedia</h3>
-        <p>Browse 230+ species with descriptions, stats, fun facts, and discovery info.</p>
+        <h3 data-en="Dinosaur Encyclopedia" data-zh="恐龙百科">Dinosaur Encyclopedia</h3>
+        <p data-en="Browse 230+ species with descriptions, stats, fun facts, and discovery info."
+           data-zh="浏览 230+ 种恐龙，包含描述、数据、趣闻和发现信息。">Browse 230+ species with descriptions, stats, fun facts, and discovery info.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F4F1;</div>
-        <h3>3D Models &amp; AR</h3>
-        <p>View dinosaurs in 3D or place them in your room with ARCore.</p>
+        <h3 data-en="3D Models &amp; AR" data-zh="3D 模型与 AR">3D Models &amp; AR</h3>
+        <p data-en="View dinosaurs in 3D or place them in your room with ARCore."
+           data-zh="3D 查看恐龙模型，或通过 ARCore 将它们放置在现实环境中。">View dinosaurs in 3D or place them in your room with ARCore.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F916;</div>
-        <h3>AI Chat</h3>
-        <p>Ask questions using DeepSeek, Qwen, Gemini, or custom LLM providers.</p>
+        <h3 data-en="AI Chat" data-zh="AI 问答">AI Chat</h3>
+        <p data-en="Ask questions using DeepSeek, Qwen, Gemini, or custom LLM providers."
+           data-zh="使用 DeepSeek、通义千问、Gemini 或自定义 LLM 进行恐龙问答。">Ask questions using DeepSeek, Qwen, Gemini, or custom LLM providers.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x23F3;</div>
-        <h3>Timeline</h3>
-        <p>Visual journey from the Triassic (252 Ma) through the K-Pg extinction to today.</p>
+        <h3 data-en="Timeline" data-zh="地质时间线">Timeline</h3>
+        <p data-en="Visual journey from the Triassic (252 Ma) through the K-Pg extinction to today."
+           data-zh="从三叠纪（2.52 亿年前）到 K-Pg 大灭绝再到今日的可视化时间旅程。">Visual journey from the Triassic (252 Ma) through the K-Pg extinction to today.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F30D;</div>
-        <h3>Discovery Map</h3>
-        <p>Interactive globe showing where fossils were found worldwide.</p>
+        <h3 data-en="Discovery Map" data-zh="化石发现地图">Discovery Map</h3>
+        <p data-en="Interactive globe showing where fossils were found worldwide."
+           data-zh="交互式地球仪，展示全球恐龙化石的发现地点。">Interactive globe showing where fossils were found worldwide.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F9E0;</div>
-        <h3>Quizzes</h3>
-        <p>Test your knowledge with randomized questions and score tracking.</p>
+        <h3 data-en="Quizzes" data-zh="知识测验">Quizzes</h3>
+        <p data-en="Test your knowledge with randomized questions and score tracking."
+           data-zh="随机题目测验恐龙知识，记录得分追踪进步。">Test your knowledge with randomized questions and score tracking.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F4F7;</div>
-        <h3>Image Recognition</h3>
-        <p>Point your camera at a dinosaur image and identify the species.</p>
+        <h3 data-en="Image Recognition" data-zh="图像识别">Image Recognition</h3>
+        <p data-en="Point your camera at a dinosaur image and identify the species."
+           data-zh="将摄像头对准恐龙图片，自动识别恐龙种类。">Point your camera at a dinosaur image and identify the species.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F50A;</div>
-        <h3>Text-to-Speech</h3>
-        <p>Listen to descriptions read aloud in English or Chinese.</p>
+        <h3 data-en="Text-to-Speech" data-zh="语音朗读">Text-to-Speech</h3>
+        <p data-en="Listen to descriptions read aloud in English or Chinese."
+           data-zh="用中文或英文朗读恐龙介绍文字。">Listen to descriptions read aloud in English or Chinese.</p>
       </div>
       <div class="feature">
         <div class="icon">&#x1F30F;</div>
-        <h3>Bilingual</h3>
-        <p>Full English and Chinese support with in-app translation toggle.</p>
+        <h3 data-en="Bilingual" data-zh="中英双语">Bilingual</h3>
+        <p data-en="Full English and Chinese support with in-app translation toggle."
+           data-zh="应用内一键切换中英文，全面支持双语内容。">Full English and Chinese support with in-app translation toggle.</p>
       </div>
     </div>
   </section>
 
   <!-- Tech Stack -->
   <section class="section">
-    <h2>Built <span>With</span></h2>
+    <h2><span data-en="Built With" data-zh="技术栈">Built With</span></h2>
     <div class="tech-grid">
-      <div class="tech-item"><span class="label">Language</span><br><span class="value">Kotlin</span></div>
+      <div class="tech-item"><span class="label" data-en="Language" data-zh="语言">Language</span><br><span class="value">Kotlin</span></div>
       <div class="tech-item"><span class="label">UI</span><br><span class="value">Jetpack Compose + Material 3</span></div>
-      <div class="tech-item"><span class="label">Architecture</span><br><span class="value">MVVM + Clean Architecture</span></div>
+      <div class="tech-item"><span class="label" data-en="Architecture" data-zh="架构">Architecture</span><br><span class="value">MVVM + Clean Architecture</span></div>
       <div class="tech-item"><span class="label">DI</span><br><span class="value">Hilt</span></div>
-      <div class="tech-item"><span class="label">Database</span><br><span class="value">Room</span></div>
-      <div class="tech-item"><span class="label">Network</span><br><span class="value">Retrofit + Moshi</span></div>
+      <div class="tech-item"><span class="label" data-en="Database" data-zh="数据库">Database</span><br><span class="value">Room</span></div>
+      <div class="tech-item"><span class="label" data-en="Network" data-zh="网络">Network</span><br><span class="value">Retrofit + Moshi</span></div>
       <div class="tech-item"><span class="label">3D / AR</span><br><span class="value">SceneView + ARCore</span></div>
       <div class="tech-item"><span class="label">AI</span><br><span class="value">OpenAI-compatible Chat API</span></div>
-      <div class="tech-item"><span class="label">Vision</span><br><span class="value">Google Cloud Vision API</span></div>
-      <div class="tech-item"><span class="label">Maps</span><br><span class="value">OSMDroid (OpenStreetMap)</span></div>
-      <div class="tech-item"><span class="label">Camera</span><br><span class="value">CameraX + ML Kit</span></div>
-      <div class="tech-item"><span class="label">Ads</span><br><span class="value">Google AdMob</span></div>
+      <div class="tech-item"><span class="label" data-en="Vision" data-zh="图像识别">Vision</span><br><span class="value">Google Cloud Vision API</span></div>
+      <div class="tech-item"><span class="label" data-en="Maps" data-zh="地图">Maps</span><br><span class="value">OSMDroid (OpenStreetMap)</span></div>
+      <div class="tech-item"><span class="label" data-en="Camera" data-zh="摄像头">Camera</span><br><span class="value">CameraX + ML Kit</span></div>
+      <div class="tech-item"><span class="label" data-en="Ads" data-zh="广告">Ads</span><br><span class="value">Google AdMob</span></div>
     </div>
   </section>
 
-  <!-- Download / Links -->
+  <!-- Links -->
   <section class="links">
-    <a href="https://github.com/tgut/world_of_dinosaurs" class="btn btn-primary">
-      <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      Source Code
+    <a href="https://github.com/tgut/world_of_dinosaurs/releases" class="btn btn-primary">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span data-en="Download APK" data-zh="下载 APK">Download APK</span>
+    </a>
+    <a href="https://github.com/tgut/world_of_dinosaurs" class="btn btn-secondary">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span data-en="Source Code" data-zh="源码">Source Code</span>
     </a>
     <a href="https://github.com/tgut/world_of_dinosaurs/blob/main/PRIVACY_POLICY.md" class="btn btn-secondary">
-      Privacy Policy
+      <span data-en="Privacy Policy" data-zh="隐私政策">Privacy Policy</span>
     </a>
   </section>
 
@@ -290,5 +321,43 @@
     <a href="https://tgut.github.io">tgut.github.io</a>
   </footer>
 
+  <script>
+    // ── Persist preferences ──
+    const prefs = {
+      theme: localStorage.getItem('dino-theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
+      lang:  localStorage.getItem('dino-lang')  || 'en'
+    };
+
+    // ── Apply theme ──
+    function applyTheme(t) {
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : '');
+      document.getElementById('themeBtn').textContent = t === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('dino-theme', t);
+      prefs.theme = t;
+    }
+    function toggleTheme() { applyTheme(prefs.theme === 'dark' ? 'light' : 'dark'); }
+
+    // ── Apply language ──
+    function applyLang(l) {
+      prefs.lang = l;
+      localStorage.setItem('dino-lang', l);
+      document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+      document.getElementById('langBtn').textContent = l === 'zh' ? 'EN' : '中文';
+
+      // Swap text content
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = l === 'zh' ? el.dataset.zh : el.dataset.en;
+      });
+      // Swap img alt
+      document.querySelectorAll('[data-en-alt]').forEach(el => {
+        el.alt = l === 'zh' ? el.dataset.zhAlt : el.dataset.enAlt;
+      });
+    }
+    function toggleLang() { applyLang(prefs.lang === 'en' ? 'zh' : 'en'); }
+
+    // ── Init on load ──
+    applyTheme(prefs.theme);
+    applyLang(prefs.lang);
+  </script>
 </body>
 </html>
