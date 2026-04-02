@@ -18,6 +18,17 @@
       --text: #e2e8f0;
       --text-dim: #94a3b8;
       --border: #2d3348;
+      --nav-bg: rgba(15, 17, 23, 0.92);
+    }
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #16a34a;
+      --accent2: #0891b2;
+      --text: #1e293b;
+      --text-dim: #64748b;
+      --border: #e2e8f0;
+      --nav-bg: rgba(248, 250, 252, 0.92);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -25,6 +36,7 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      transition: background 0.2s, color 0.2s;
     }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -37,15 +49,28 @@
       padding: 20px 40px;
       border-bottom: 1px solid var(--border);
       position: sticky; top: 0;
-      background: rgba(15, 17, 23, 0.92);
+      background: var(--nav-bg);
       backdrop-filter: blur(8px);
       z-index: 10;
     }
     .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--text); }
     .nav-logo span { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
     .nav-links { display: flex; gap: 24px; font-size: 0.9rem; color: var(--text-dim); }
     .nav-links a { color: var(--text-dim); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-toggles { display: flex; gap: 8px; }
+    .toggle-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .toggle-btn:hover { border-color: var(--accent); color: var(--text); }
 
     /* ── Hero ── */
     .hero {
@@ -193,10 +218,16 @@
 
   <nav>
     <span class="nav-logo">tgut<span>.</span></span>
-    <div class="nav-links">
-      <a href="#apps">Apps</a>
-      <a href="#skills">Skills</a>
-      <a href="https://github.com/tgut">GitHub</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#apps"    data-en="Apps"   data-zh="应用">Apps</a>
+        <a href="#skills"  data-en="Skills" data-zh="技能">Skills</a>
+        <a href="https://github.com/tgut">GitHub</a>
+      </div>
+      <div class="nav-toggles">
+        <button class="toggle-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
+        <button class="toggle-btn" id="langBtn"  onclick="toggleLang()">中文</button>
+      </div>
     </div>
   </nav>
 
@@ -205,20 +236,22 @@
     <div class="hero-top">
       <div class="avatar">T</div>
       <div>
-        <h1>Hi, I'm <span>tgut</span></h1>
+        <h1 data-en="Hi, I'm <span>tgut</span>" data-zh="你好，我是 <span>tgut</span>">Hi, I'm <span>tgut</span></h1>
       </div>
     </div>
-    <p class="bio">
+    <p class="bio"
+       data-en="Software engineer focused on embedded systems, Android development, autonomous vehicles, and distributed computing."
+       data-zh="专注于嵌入式系统、Android 开发、自动驾驶和分布式计算的软件工程师。">
       Software engineer focused on embedded systems, Android development,
       autonomous vehicles, and distributed computing.
     </p>
     <div class="tags">
-      <span class="tag">Embedded Software</span>
-      <span class="tag">Android</span>
-      <span class="tag">Autonomous Vehicles</span>
-      <span class="tag">Distributed Computing</span>
-      <span class="tag">Kotlin</span>
-      <span class="tag">C / C++</span>
+      <span class="tag" data-en="Embedded Software"    data-zh="嵌入式软件">Embedded Software</span>
+      <span class="tag" data-en="Android"              data-zh="Android">Android</span>
+      <span class="tag" data-en="Autonomous Vehicles"  data-zh="自动驾驶">Autonomous Vehicles</span>
+      <span class="tag" data-en="Distributed Computing" data-zh="分布式计算">Distributed Computing</span>
+      <span class="tag" data-en="Kotlin"               data-zh="Kotlin">Kotlin</span>
+      <span class="tag" data-en="C / C++"              data-zh="C / C++">C / C++</span>
     </div>
     <div class="hero-links">
       <a href="https://github.com/tgut" class="btn btn-primary">
@@ -227,19 +260,22 @@
       </a>
       <a href="mailto:lzhchen_ustc@163.com" class="btn btn-secondary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        Email
+        <span data-en="Email" data-zh="邮件">Email</span>
       </a>
     </div>
   </section>
 
   <!-- Apps -->
   <section class="section" id="apps">
-    <div class="section-title">// <span>Apps</span></div>
+    <div class="section-title">// <span data-en="Apps" data-zh="应用">Apps</span></div>
     <a href="/world-of-dinosaurs/" class="app-card">
       <img src="/world-of-dinosaurs/images/app_icon.png" alt="World of Dinosaurs" class="app-card-icon">
       <div class="app-card-body">
         <h3>World of Dinosaurs</h3>
-        <p>Interactive dinosaur encyclopedia for Android — 230+ species, 3D models, AR viewing, AI chat, quizzes, timeline, and bilingual (EN/CN) support.</p>
+        <p data-en="Interactive dinosaur encyclopedia for Android — 230+ species, 3D models, AR viewing, AI chat, quizzes, timeline, and bilingual (EN/CN) support."
+           data-zh="Android 恐龙百科全书 — 230+ 种恐龙、3D 模型、AR 查看、AI 对话、答题、时间轴，支持中英双语。">
+          Interactive dinosaur encyclopedia for Android — 230+ species, 3D models, AR viewing, AI chat, quizzes, timeline, and bilingual (EN/CN) support.
+        </p>
         <div class="app-tags">
           <span class="app-tag">Android</span>
           <span class="app-tag">Kotlin</span>
@@ -253,30 +289,30 @@
 
   <!-- Skills -->
   <section class="section" id="skills">
-    <div class="section-title">// <span>Skills</span></div>
+    <div class="section-title">// <span data-en="Skills" data-zh="技能">Skills</span></div>
     <div class="skills-grid">
       <div class="skill-item">
-        <div class="skill-area">Languages</div>
+        <div class="skill-area" data-en="Languages"         data-zh="编程语言">Languages</div>
         <div class="skill-name">C / C++ / Kotlin / Python</div>
       </div>
       <div class="skill-item">
-        <div class="skill-area">Android</div>
+        <div class="skill-area" data-en="Android"           data-zh="Android">Android</div>
         <div class="skill-name">Jetpack Compose · MVVM · Hilt</div>
       </div>
       <div class="skill-item">
-        <div class="skill-area">Embedded</div>
+        <div class="skill-area" data-en="Embedded"          data-zh="嵌入式">Embedded</div>
         <div class="skill-name">AUTOSAR · MCU · CAN / SOME-IP</div>
       </div>
       <div class="skill-item">
-        <div class="skill-area">Autonomous Vehicles</div>
+        <div class="skill-area" data-en="Autonomous Vehicles" data-zh="自动驾驶">Autonomous Vehicles</div>
         <div class="skill-name">ROS · Sensor Fusion · AD Systems</div>
       </div>
       <div class="skill-item">
-        <div class="skill-area">Distributed</div>
+        <div class="skill-area" data-en="Distributed"       data-zh="分布式">Distributed</div>
         <div class="skill-name">Distributed Computing · Linux</div>
       </div>
       <div class="skill-item">
-        <div class="skill-area">Graphics / AI</div>
+        <div class="skill-area" data-en="Graphics / AI"     data-zh="图形 / AI">Graphics / AI</div>
         <div class="skill-name">GPU · CUDA · LLM Integration</div>
       </div>
     </div>
@@ -290,5 +326,37 @@
     </span>
   </footer>
 
+  <script>
+    const prefs = {
+      theme: localStorage.getItem('tgut-theme') ||
+             (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'),
+      lang:  localStorage.getItem('tgut-lang') || 'en'
+    };
+
+    function applyTheme(t) {
+      document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : '');
+      document.getElementById('themeBtn').textContent = t === 'light' ? '🌙' : '☀️';
+      localStorage.setItem('tgut-theme', t);
+      prefs.theme = t;
+    }
+    function toggleTheme() { applyTheme(prefs.theme === 'dark' ? 'light' : 'dark'); }
+
+    function applyLang(l) {
+      prefs.lang = l;
+      localStorage.setItem('tgut-lang', l);
+      document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+      document.getElementById('langBtn').textContent = l === 'zh' ? 'EN' : '中文';
+      document.querySelectorAll('[data-en]').forEach(el => {
+        const val = l === 'zh' ? el.dataset.zh : el.dataset.en;
+        // allow simple inline HTML (e.g. <span> in h1)
+        if (val && val.includes('<')) { el.innerHTML = val; }
+        else if (val) { el.textContent = val; }
+      });
+    }
+    function toggleLang() { applyLang(prefs.lang === 'en' ? 'zh' : 'en'); }
+
+    applyTheme(prefs.theme);
+    applyLang(prefs.lang);
+  </script>
 </body>
 </html>
